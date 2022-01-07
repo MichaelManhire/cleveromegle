@@ -1,0 +1,24 @@
+{
+  "name": "cleveromegle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelManhire/cleveromegle.git"
+  },
+  "author": "Michael Manhire <michaelmanhire@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MichaelManhire/cleveromegle/issues"
+  },
+  "homepage": "https://github.com/MichaelManhire/cleveromegle#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "keypress": "^0.2.1",
+    "omegle-node-fix": "^1.1.7"
+  }
+}
