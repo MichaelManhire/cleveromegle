@@ -1,9 +1,15 @@
 const chalk = require('chalk');
+const dotenv = require('dotenv');
 const keypress = require('keypress');
+const Cleverbot = require('cleverbot-node');
 const Omegle = require('omegle-node-fix');
+const cleverbot = new Cleverbot;
 const omegle = new Omegle();
+let isTyping = false;
 
 // Init
+dotenv.config();
+cleverbot.configure({ botapi: process.env.CLEVERBOT_KEY });
 keypress(process.stdin);
 console.log(chalk.green('Welcome to CleverOmegle!'));
 
@@ -22,10 +28,13 @@ omegle.on('waiting', () => {
 
 omegle.on('connected', () => {
     console.log(`${chalk.green('Connected to a stranger!')} To disconnect at any time, press ESC.\n`);
+    isTyping = false;
 });
 
 omegle.on('gotMessage', (message) => {
     console.log(`${chalk.red('Stranger:')} ${message}`);
+
+    prepareCleverbotResponse(message);
 });
 
 omegle.on('connectionDied', () => {
@@ -35,6 +44,62 @@ omegle.on('connectionDied', () => {
 omegle.on('disconnected', () => {
     console.log(`\n${chalk.red('Disconnected!')} Press SPACE to connect to a new stranger, or press Q to quit.`);
 });
+
+// Cleverbot
+const prepareCleverbotResponse = (message) => {
+    const waitingTime = Math.random() * (3000 - 1000) + 1000;
+
+    if (!isTyping || !omegle.connected()) {
+        console.log(`Cleverbot is waiting to reply... (${waitingTime / 1000} seconds)`);
+    } else {
+        return;
+    }
+
+    setTimeout(() => {
+        getCleverbotResponse(message);
+    }, waitingTime);
+};
+
+const getCleverbotResponse = (message) => {
+    let cleverbotResponse = '?';
+    let typingTime = 1000;
+
+    if (!omegle.connected()) {
+        return;
+    }
+
+    cleverbot.write(message, (response) => {
+        if (response.output === '') {
+            cleverbot.write(message, (response) => {
+                cleverbotResponse = response.output;
+            });
+        } else {
+            cleverbotResponse = response.output;
+        }
+
+        typingTime = cleverbotResponse.length * 200;
+        omegle.startTyping();
+        isTyping = true;
+        console.log(`Cleverbot is typing... (${typingTime / 1000} seconds)`);
+        setTimeout(() => {
+            sendCleverbotResponse(cleverbotResponse);
+        }, typingTime);
+    });
+};
+
+const sendCleverbotResponse = (response) => {
+    let manipulatedResponse = response.toLowerCase();
+        manipulatedResponse = manipulatedResponse.replace(/\.$/, '');
+
+    if (!omegle.connected()) {
+        return;
+    }
+
+    omegle.stopTyping();
+    isTyping = false;
+    console.log(`${chalk.blue('Cleverbot:')} ${manipulatedResponse}`);
+    omegle.send(manipulatedResponse);
+};
 
 // Keypress Events
 process.stdin.on('keypress', (ch, key) => {
