@@ -8,7 +8,8 @@ let cleverbot;
 
 const interests = [];
 const isDebugMode = false;
-let isTyping = false;
+let isResponding = false;
+let isStarted = false;
 
 // Init
 dotenv.config();
@@ -30,11 +31,20 @@ omegle.on('waiting', () => {
 
 omegle.on('connected', () => {
     console.log(`${chalk.green('Connected to a stranger!')} To disconnect at any time, press ESC.`);
-    isTyping = false;
+    isResponding = false;
+    isStarted = false;
+    omegle.stopTyping();
+
+    setTimeout(() => {
+        if (!isStarted) {
+            prepareCleverbotResponse('hello');
+        }
+    }, 5000);
 });
 
 omegle.on('gotMessage', (message) => {
     console.log(`${chalk.red('Stranger:')} ${message}`);
+    isStarted = true;
 
     prepareCleverbotResponse(message);
 });
@@ -51,7 +61,7 @@ omegle.on('disconnected', () => {
 const prepareCleverbotResponse = (message) => {
     const waitingTime = Math.random() * (3000 - 1000) + 1000;
 
-    if (!isTyping || !omegle.connected()) {
+    if (!isResponding || !omegle.connected()) {
         if (isDebugMode) {
             console.log(`Cleverbot is waiting to reply... (${waitingTime / 1000} seconds)`);
         }
@@ -59,6 +69,7 @@ const prepareCleverbotResponse = (message) => {
         return;
     }
 
+    isResponding = true;
     setTimeout(() => {
         getCleverbotResponse(message);
     }, waitingTime);
@@ -83,7 +94,6 @@ const getCleverbotResponse = (message) => {
 
         typingTime = cleverbotResponse.length * 200;
         omegle.startTyping();
-        isTyping = true;
         if (isDebugMode) {
             console.log(`Cleverbot is typing... (${typingTime / 1000} seconds)`);
             console.dir(response);
@@ -110,9 +120,9 @@ const sendCleverbotResponse = (response) => {
     }
 
     omegle.stopTyping();
-    isTyping = false;
     console.log(`${chalk.blue('Cleverbot:')} ${manipulatedResponse}`);
     omegle.send(manipulatedResponse);
+    isResponding = false;
 };
 
 // Keypress Events
