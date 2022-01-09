@@ -97,6 +97,13 @@ const getCleverbotResponse = (message) => {
 const sendCleverbotResponse = (response) => {
     let manipulatedResponse = response.toLowerCase();
         manipulatedResponse = manipulatedResponse.replace(/\.$/, '');
+        manipulatedResponse = manipulatedResponse.replace(/\.\.$/, '...');
+        manipulatedResponse = manipulatedResponse.replace(/:\)$/, '🙂');
+        manipulatedResponse = manipulatedResponse.replace(/:\($/, '😔');
+        manipulatedResponse = manipulatedResponse.replace(/;\)$/, '😉');
+        manipulatedResponse = manipulatedResponse.replace(/:d$/, '😊');
+        manipulatedResponse = manipulatedResponse.replace(/d:$/, '😢');
+        manipulatedResponse = manipulatedResponse.replace(/:p$/, '😛');
 
     if (!omegle.connected()) {
         return;
