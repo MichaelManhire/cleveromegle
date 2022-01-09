@@ -5,6 +5,8 @@ const Cleverbot = require('cleverbot-node');
 const Omegle = require('omegle-node-fix');
 const cleverbot = new Cleverbot;
 const omegle = new Omegle();
+
+const interests = [];
 const isDebugMode = false;
 let isTyping = false;
 
@@ -110,13 +112,13 @@ const sendCleverbotResponse = (response) => {
 process.stdin.on('keypress', (ch, key) => {
     if (key && key.name === 'escape') {
         if (omegle.connected()) {
-            omegle.disconnect();
+            omegle.disconnect(interests);
         }
     }
 
     if (key && key.name === 'space') {
         if (!omegle.connected()) {
-            omegle.connect();
+            omegle.connect(interests);
         }
     }
 
@@ -132,4 +134,4 @@ process.stdin.setRawMode(true);
 process.stdin.resume();
 
 // Start
-omegle.connect();
+omegle.connect(interests);
