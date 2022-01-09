@@ -1,10 +1,10 @@
 const chalk = require('chalk');
 const dotenv = require('dotenv');
 const keypress = require('keypress');
-const Cleverbot = require('cleverbot-node');
 const Omegle = require('omegle-node-fix');
-const cleverbot = new Cleverbot;
 const omegle = new Omegle();
+const Cleverbot = require('cleverbot-node');
+let cleverbot;
 
 const interests = [];
 const isDebugMode = false;
@@ -12,7 +12,6 @@ let isTyping = false;
 
 // Init
 dotenv.config();
-cleverbot.configure({ botapi: process.env.CLEVERBOT_KEY });
 keypress(process.stdin);
 console.log(chalk.green('Welcome to CleverOmegle!'));
 
@@ -87,6 +86,7 @@ const getCleverbotResponse = (message) => {
         isTyping = true;
         if (isDebugMode) {
             console.log(`Cleverbot is typing... (${typingTime / 1000} seconds)`);
+            console.dir(response);
         }
         setTimeout(() => {
             sendCleverbotResponse(cleverbotResponse);
@@ -118,7 +118,7 @@ process.stdin.on('keypress', (ch, key) => {
 
     if (key && key.name === 'space') {
         if (!omegle.connected()) {
-            omegle.connect(interests);
+            connect();
         }
     }
 
@@ -134,4 +134,9 @@ process.stdin.setRawMode(true);
 process.stdin.resume();
 
 // Start
-omegle.connect(interests);
+const connect = () => {
+    cleverbot = new Cleverbot;
+    cleverbot.configure({ botapi: process.env.CLEVERBOT_KEY });
+    omegle.connect(interests);
+};
+connect();
