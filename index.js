@@ -31,13 +31,11 @@ omegle.on('waiting', () => {
 omegle.on('connected', () => {
     console.log(`${chalk.green('Connected to a stranger!')} To disconnect at any time, press ESC.`);
     isResponding = false;
-    isStarted = false;
     omegle.stopTyping();
 });
 
 omegle.on('gotMessage', (message) => {
     console.log(`${chalk.red('Stranger:')} ${message}`);
-    isStarted = true;
 
     prepareCleverbotResponse(message);
 });
