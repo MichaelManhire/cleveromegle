@@ -9,7 +9,6 @@ let cleverbot;
 const interests = [];
 const isDebugMode = false;
 let isResponding = false;
-let isStarted = false;
 
 // Init
 dotenv.config();
@@ -34,12 +33,6 @@ omegle.on('connected', () => {
     isResponding = false;
     isStarted = false;
     omegle.stopTyping();
-
-    setTimeout(() => {
-        if (!isStarted) {
-            prepareCleverbotResponse('hello');
-        }
-    }, 5000);
 });
 
 omegle.on('gotMessage', (message) => {
