@@ -76,8 +76,36 @@ const prepareCleverbotResponse = (message) => {
 };
 
 const getCleverbotResponse = (message) => {
-    let cleverbotResponse = '?';
+    const random = Math.floor(Math.random() * (6 - 0 + 1) + 0);
+    let cleverbotResponse;
     let typingTime = 1000;
+
+    switch (random) {
+        case 0:
+            cleverbotResponse = 'ok';
+            break;
+        case 1:
+            cleverbotResponse = 'yes';
+            break;
+        case 2:
+            cleverbotResponse = 'sure';
+            break;
+        case 3:
+            cleverbotResponse = ':)';
+            break;
+        case 4:
+            cleverbotResponse = 'what?';
+            break;
+        case 5:
+            cleverbotResponse = 'idk';
+            break;
+        case 6:
+            cleverbotResponse = 'no';
+            break;
+        default:
+            cleverbotResponse = 'lol';
+            break;
+    }
 
     if (!omegle.connected()) {
         return;
