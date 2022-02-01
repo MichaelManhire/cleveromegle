@@ -85,9 +85,19 @@ const getCleverbotResponse = (message) => {
 
     cleverbot.write(message, (response) => {
         if (response.output === '') {
-            cleverbot.write(message, (response) => {
-                cleverbotResponse = response.output;
-            });
+            setTimeout(() => {
+                cleverbot.write(message, (response) => {
+                    cleverbotResponse = response.output;
+
+                    if (response.output === '') {
+                        setTimeout(() => {
+                            cleverbot.write(message, (response) => {
+                                cleverbotResponse = response.output;
+                            });
+                        }, 2000);
+                    }
+                });
+            }, 2000);
         } else {
             cleverbotResponse = response.output;
         }
