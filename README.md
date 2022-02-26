@@ -10,7 +10,7 @@ cp .env.example .env
 Obtain a key from the [Cleverbot API](https://www.cleverbot.com/api/), then add your API key to `.env`:
 
 ```
-CLEVERBOT_KEY=[YOUR_API_KEY]
+CLEVERBOT_KEY=YOUR_API_KEY
 INTERESTS=
 APP_DEBUG=false
 ```
@@ -22,6 +22,8 @@ CLEVERBOT_KEY=[YOUR_API_KEY]
 INTERESTS='your','interests','here'
 APP_DEBUG=false
 ```
+
+## Usage
 
 Once you have configured `.env`, run CleverOmegle:
 
