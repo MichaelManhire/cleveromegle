@@ -1,17 +1,16 @@
 const chalk = require('chalk');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config();
 const keypress = require('keypress');
 const Omegle = require('omegle-node-fix');
 const omegle = new Omegle();
 const Cleverbot = require('cleverbot-node');
 let cleverbot;
-
-const interests = [];
-const isDebugMode = false;
 let isResponding = false;
 
+const interests = [process.env.INTERESTS];
+const isDebugMode = !!(process.env.APP_DEBUG === 'true');
+
 // Init
-dotenv.config();
 keypress(process.stdin);
 console.log(chalk.green('Welcome to CleverOmegle!'));
 
