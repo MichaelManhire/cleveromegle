@@ -1,5 +1,7 @@
 # CleverOmegle
 
+CleverOmegle connects [Cleverbot](https://www.cleverbot.com/) to the anonymous chat app, [Omegle](https://www.omegle.com/). Strangers chat with Cleverbot unknowingly, and hilarity ensues!
+
 ## Installation
 
 ```
