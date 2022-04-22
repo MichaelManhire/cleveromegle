@@ -47,13 +47,18 @@ omegle.on('disconnected', () => {
     console.log(`${chalk.red('Disconnected!')} Press SPACE to connect to a new stranger, or press Q to quit.\n`);
 });
 
+omegle.on('omegleError', (errorMessage) => {
+    console.log(`${chalk.red('Omegle Error!')} Press SPACE to connect to a new stranger, or press Q to quit.`);
+    console.log(`${chalk.red(errorMessage)}\n`);
+});
+
 // Cleverbot
 const prepareCleverbotResponse = (message) => {
     const waitingTime = Math.random() * (3000 - 1000) + 1000;
 
     if (!isResponding || !omegle.connected()) {
         if (isDebugMode) {
-            console.log(`Cleverbot is waiting to reply... (${waitingTime / 1000} seconds)`);
+            console.log(`${chalk.blue('Cleverbot')} is waiting to reply... (${(waitingTime / 1000).toFixed(2)} seconds)`);
         }
     } else {
         return;
@@ -120,11 +125,14 @@ const getCleverbotResponse = (message) => {
             cleverbotResponse = response.output;
         }
 
+        if (!omegle.connected()) {
+            return;
+        }
+
         typingTime = cleverbotResponse.length * 200;
         omegle.startTyping();
         if (isDebugMode) {
-            console.log(`Cleverbot is typing... (${typingTime / 1000} seconds)`);
-            console.dir(response);
+            console.log(`${chalk.blue('Cleverbot')} is typing... (${(typingTime / 1000).toFixed(2)} seconds)`);
         }
         setTimeout(() => {
             sendCleverbotResponse(cleverbotResponse);
@@ -146,9 +154,14 @@ const sendCleverbotResponse = (response) => {
     }
 
     omegle.stopTyping();
-    console.log(`${chalk.blue('Cleverbot:')} ${manipulatedResponse}`);
-    omegle.send(manipulatedResponse);
-    isResponding = false;
+    if (isDebugMode) {
+        console.log(`${chalk.blue('Cleverbot')} has stopped typing.`);
+    }
+    setTimeout(() => {
+        console.log(`${chalk.blue('Cleverbot:')} ${manipulatedResponse}`);
+        omegle.send(manipulatedResponse);
+        isResponding = false;
+    }, 250);
 };
 
 // Keypress Events
