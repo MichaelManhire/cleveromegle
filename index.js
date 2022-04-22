@@ -143,11 +143,16 @@ const getCleverbotResponse = (message) => {
 const sendCleverbotResponse = (response) => {
     let manipulatedResponse = response.toLowerCase();
         manipulatedResponse = manipulatedResponse.replace(/\.$/, '');
+        manipulatedResponse = manipulatedResponse.replaceAll('*', '');
+        manipulatedResponse = manipulatedResponse.replaceAll('\'', '');
         manipulatedResponse = manipulatedResponse.replace(/\.\.$/, '...');
+        manipulatedResponse = manipulatedResponse.replace(/:\)$/, '^c:');
+        manipulatedResponse = manipulatedResponse.replace(/:\($/, ':c');
         manipulatedResponse = manipulatedResponse.replace(/:d$/, ':D');
         manipulatedResponse = manipulatedResponse.replace(/d:$/, 'D:');
         manipulatedResponse = manipulatedResponse.replace(/:p$/, ':P');
         manipulatedResponse = manipulatedResponse.replace(/xd$/, 'XD');
+        manipulatedResponse = manipulatedResponse.replace(/xp$/, 'XP');
 
     if (!omegle.connected()) {
         return;
