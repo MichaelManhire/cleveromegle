@@ -54,7 +54,15 @@ omegle.on('omegleError', (errorMessage) => {
 
 // Cleverbot
 const prepareCleverbotResponse = (message) => {
+    const isAskingForAsl = message.toLowerCase().includes('asl');
     const waitingTime = Math.random() * (3000 - 1000) + 1000;
+
+    if (isAskingForAsl) {
+        isResponding = true;
+        setTimeout(() => {
+            handleAsl();
+        }, waitingTime);
+    }
 
     if (!isResponding || !omegle.connected()) {
         if (isDebugMode) {
@@ -71,6 +79,7 @@ const prepareCleverbotResponse = (message) => {
 };
 
 const getCleverbotResponse = (message) => {
+    const isAskingForAsl = message.toLowerCase().includes('asl');
     const random = Math.floor(Math.random() * (6 - 0 + 1) + 0);
     let cleverbotResponse;
     let typingTime = 1000;
@@ -104,6 +113,10 @@ const getCleverbotResponse = (message) => {
 
     if (!omegle.connected()) {
         return;
+    }
+
+    if (isAskingForAsl) {
+        handleAsl();
     }
 
     cleverbot.write(message, (response) => {
@@ -168,6 +181,13 @@ const sendCleverbotResponse = (response) => {
         isResponding = false;
     }, 250);
 };
+
+const handleAsl = () => {
+    const age = Math.floor(Math.random() * (28 - 16 + 1) + 16);
+    const gender = Math.random() < 0.5 ? 'm' : 'f';
+
+    return sendCleverbotResponse(`${age}${gender}`);
+}
 
 // Keypress Events
 process.stdin.on('keypress', (ch, key) => {
